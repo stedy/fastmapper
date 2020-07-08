@@ -9,13 +9,15 @@ addresses of interest to a CSV file in the format as shown:
 ```
 name,street,city,state,zip
 Tmobile Park,1250 1st Ave S,Seattle,WA,98134
-CenturyLink Field,800 Occidental Ave S, Seattle, WA,98134
-Key Arena,305 Harrison St, Seattle, WA,98109
-McCarthey Center,801 N Cincinnati St, Spokane, WA,99258
+Cheney Stadium,2502 South Tyler Street,Tacoma,WA,98405
+Funko Field,3900 Broadway,Everett,WA,98201
+Avista Stadium,602 N. Havana Street,Spokane,WA,99202
+Paul Thomas Sr. Stadium,300 Fifth St.,Wenatchee,WA,98801
+
 ```
 
 The main script geolocates all the addresses, writes them to a
 [GeoJSON](https://geojson.org/) file which is then mapped to a [Leaflet map](https://leafletjs.com/) in
 a new browser window.
 
-![](https://i.imgur.com/XEe5dOY.png)
+![](https://i.imgur.com/0yZ5Bgo.png)
