@@ -30,7 +30,6 @@ with open(args.i) as csvfile:
     reader = csv.reader(csvfile, delimiter = ",")
     for row in reader:
         base_address = row[1] + "," + row[2] + ", " + row[3] + ", " + row[4]
-        print base_address
         try:
             gr = gmaps.geocode(base_address)
             latitude = gr[0]['geometry']['location']['lat']
