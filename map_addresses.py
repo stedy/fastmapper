@@ -15,6 +15,8 @@ def start_server():
 
 parser = argparse.ArgumentParser(description="""Command line utility to geolocate and map a text file of addresses""")
 parser.add_argument('-i', help="Input file of complete mailing addesses")
+parser.add_argument('-m', help="Add map marker for median of mapped addresses",
+        action = "store_true")
 parser.add_argument('-key', help="Text file with Google Maps API key", type=argparse.FileType("r"))
 
 args = parser.parse_args()
@@ -25,6 +27,8 @@ raw_key = args.key.read().rstrip("\n")
 gmaps = googlemaps.Client(key= raw_key)
 
 features = []
+lats = []
+longs = []
 with open(args.i) as csvfile:
     csvfile.next()
     reader = csv.reader(csvfile, delimiter = ",")
@@ -36,6 +40,8 @@ with open(args.i) as csvfile:
             longitude = gr[0]['geometry']['location']['lng']
         except IndexError:
             latitude, longitude = '', ''
+        lats.append(latitude)
+        longs.append(longitude)
         features.append(
             Feature(
                 geometry = Point((longitude,latitude)),
@@ -44,6 +50,18 @@ with open(args.i) as csvfile:
                     'address': row[1]
                     }
                 )
+        )
+lat_mean = sum(lats)/len(lats)
+long_mean = sum(longs)/len(longs)
+
+if args.m:
+    features.append(
+        Feature(
+            geometry = Point((long_mean, lat_mean)),
+            properties = {
+                'name': "median"
+                }
+            )
         )
 
 collection = FeatureCollection(features)
