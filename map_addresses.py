@@ -1,16 +1,17 @@
-import googlemaps
 import csv
 import sys
 import argparse
 import webbrowser
-import SimpleHTTPServer
-import BaseHTTPServer
-import thread
+import http.server
+from http.server import HTTPServer, SimpleHTTPRequestHandler
+import threading
+import _thread
 import time
+import googlemaps
 from geojson import Feature, FeatureCollection, Point
 
 def start_server():
-    httpd = BaseHTTPServer.HTTPServer(('127.0.0.1', 3600), SimpleHTTPServer.SimpleHTTPRequestHandler)
+    httpd = HTTPServer(('127.0.0.1', 3600), SimpleHTTPRequestHandler)
     httpd.serve_forever()
 
 parser = argparse.ArgumentParser(description="""Command line utility to geolocate and map a text file of addresses""")
@@ -30,7 +31,7 @@ features = []
 lats = []
 longs = []
 with open(args.i) as csvfile:
-    csvfile.next()
+    csvfile.__next__()
     reader = csv.reader(csvfile, delimiter = ",")
     for row in reader:
         base_address = row[1] + "," + row[2] + ", " + row[3] + ", " + row[4]
@@ -68,7 +69,7 @@ collection = FeatureCollection(features)
 with open("map.geojson", "w") as f:
     f.write('%s' % collection)
 
-thread.start_new_thread(start_server,())
+_thread.start_new_thread(start_server,())
 url = 'http://127.0.0.1:3600'
 webbrowser.open_new(url)
 
